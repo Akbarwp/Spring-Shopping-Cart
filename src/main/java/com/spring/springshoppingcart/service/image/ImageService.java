@@ -9,6 +9,7 @@ import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springshoppingcart.dto.ImageDto;
@@ -31,12 +32,14 @@ public class ImageService implements IImageService {
     private final ImageRepository imageRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Image getImageById(Long id) {
         return imageRepository.findById(id)
             .orElseThrow(() -> new ResourceException("Image not found with id: " + id));
     }
 
     @Override
+    @Transactional
     public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
         Product product = productService.getProductById(productId);
         List<ImageDto> savedImageDto = new ArrayList<>();
@@ -70,6 +73,7 @@ public class ImageService implements IImageService {
     }
 
     @Override
+    @Transactional
     public void updateImage(MultipartFile file, Long productId) {
         Image image = getImageById(productId);
         try {
@@ -84,6 +88,7 @@ public class ImageService implements IImageService {
     }
 
     @Override
+    @Transactional
     public void deleteImageById(Long id) {
         imageRepository.findById(id)
             .ifPresentOrElse(

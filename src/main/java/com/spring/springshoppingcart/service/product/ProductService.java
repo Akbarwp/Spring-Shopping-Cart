@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.springshoppingcart.dto.ImageDto;
 import com.spring.springshoppingcart.dto.ProductDto;
@@ -37,12 +38,14 @@ public class ProductService implements IProductService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public Product getProductById(Long id) {
         return productRepository.findById(id)
             .orElseThrow(() -> new ResourceException("Product not found!"));
     }
 
     @Override
+    @Transactional
     public Product addProduct(AddProductRequest request) {
         // check if category exists
         // if Yes, set as new product category
@@ -69,6 +72,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public Product updateProductById(UpdateProductRequest request, Long productId) {
         return productRepository.findById(productId)
             .map(existingProduct -> updateExistingProduct(existingProduct, request))
@@ -90,6 +94,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProductById(Long id) {
         productRepository.findById(id)
             .ifPresentOrElse(
@@ -99,36 +104,43 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategoryName(category);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsByBrand(String brand) {
         return productRepository.findByBrand(brand);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
         return productRepository.findByCategoryNameAndBrand(category, brand);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsByName(String name) {
         return productRepository.findByName(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> getProductsByBrandAndName(String brand, String name) {
         return productRepository.findByBrandAndName(brand, name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
     }
