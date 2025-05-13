@@ -44,3 +44,33 @@ CREATE TABLE images (
 
 SELECT * FROM images;
 DESC images;
+
+-- Table Carts
+CREATE TABLE carts (
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+    total_amount            DOUBLE(38, 2) NOT NULL DEFAULT(0),
+    created_at              TIMESTAMP,
+    updated_at              TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE InnoDB;
+
+SELECT * FROM carts;
+DESC carts;
+
+-- Table Cart Items
+CREATE TABLE cart_items (
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+    quantity                INT NOT NULL,
+    unit_price              DOUBLE(38, 2) NOT NULL,
+    total_price             DOUBLE(38, 2) NOT NULL,
+    product_id              BIGINT NOT NULL,
+    cart_id                 BIGINT NOT NULL,
+    created_at              TIMESTAMP,
+    updated_at              TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY fk_products_cart_items (product_id) REFERENCES products (id),
+    FOREIGN KEY fk_carts_cart_items (cart_id) REFERENCES carts (id)
+) ENGINE InnoDB;
+
+SELECT * FROM cart_items;
+DESC cart_items;
