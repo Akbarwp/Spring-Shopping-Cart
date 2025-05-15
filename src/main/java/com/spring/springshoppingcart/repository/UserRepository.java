@@ -3,9 +3,9 @@ package com.spring.springshoppingcart.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.spring.springshoppingcart.model.Cart;
+import com.spring.springshoppingcart.model.User;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
-    Cart findByUserId(Long userId);
+public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
 }

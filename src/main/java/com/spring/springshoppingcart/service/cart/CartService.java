@@ -52,8 +52,15 @@ public class CartService implements ICartService {
     }
 
     @Override
+    @Transactional
     public Long initializeNewCart() {
         Cart newCart = new Cart();
         return cartRepository.save(newCart).getId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Cart getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
     }
 }

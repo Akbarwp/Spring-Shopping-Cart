@@ -49,9 +49,11 @@ DESC images;
 CREATE TABLE carts (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
     total_amount            DOUBLE(38, 2) NOT NULL DEFAULT(0),
+    user_id                 BIGINT NOT NULL,
     created_at              TIMESTAMP,
     updated_at              TIMESTAMP,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY fk_users_carts (user_id) REFERENCES users (id)
 ) ENGINE InnoDB;
 
 SELECT * FROM carts;
@@ -74,3 +76,51 @@ CREATE TABLE cart_items (
 
 SELECT * FROM cart_items;
 DESC cart_items;
+
+-- Table Orders
+CREATE TABLE orders (
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+    order_date              DATE NOT NULL,
+    total_amount            DOUBLE(38, 2) NOT NULL DEFAULT(0),
+    order_status            ENUM('PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED') NOT NULL DEFAULT('PENDING'),
+    user_id                 BIGINT NOT NULL,
+    created_at              TIMESTAMP,
+    updated_at              TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY fk_users_orders (user_id) REFERENCES users (id)
+) ENGINE InnoDB;
+
+SELECT * FROM orders;
+DESC orders;
+
+-- Table Order Items
+CREATE TABLE order_items (
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+    quantity                INT NOT NULL,
+    price                   DOUBLE(38, 2) NOT NULL,
+    total_price             DOUBLE(38, 2) NOT NULL,
+    product_id              BIGINT NOT NULL,
+    order_id                BIGINT NOT NULL,
+    created_at              TIMESTAMP,
+    updated_at              TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY fk_products_order_items (product_id) REFERENCES products (id),
+    FOREIGN KEY fk_orders_order_items (order_id) REFERENCES orders (id)
+) ENGINE InnoDB;
+
+SELECT * FROM order_items;
+DESC order_items;
+
+-- Table Users
+CREATE TABLE users (
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+    email                   VARCHAR(255) NOT NULL UNIQUE,
+    password                VARCHAR(255) NOT NULL,
+    name                    VARCHAR(255) NOT NULL,
+    created_at              TIMESTAMP,
+    updated_at              TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE InnoDB;
+
+SELECT * FROM users;
+DESC users;

@@ -25,5 +25,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.brand = :brand AND p.name LIKE CONCAT('%', :name, '%')")
     Long countByBrandAndName(String brand, String name);
-
 }
