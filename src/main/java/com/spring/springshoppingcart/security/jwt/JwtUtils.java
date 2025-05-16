@@ -23,10 +23,10 @@ import com.spring.springshoppingcart.security.user.ShopUserDetails;
 @Component
 public class JwtUtils {
 
-    @Value("${auth.jwt.jwtSecret}")
+    @Value("${auth.token.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${auth.jwt.expirationInMils}")
+    @Value("${auth.token.expirationInMils}")
     private int expirationTime;
 
     public String generateTokenForUser(Authentication authentication) {

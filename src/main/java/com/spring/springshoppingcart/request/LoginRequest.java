@@ -1,6 +1,5 @@
 package com.spring.springshoppingcart.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,18 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateUserRequest {
-
-    @NotBlank
-    @Size(max = 255)
-    private String name;
-
+public class LoginRequest {
     @NotBlank
     @Size(max = 255)
     @Email
-    @Column(unique = true)
     private String email;
-    
+
     @NotBlank
     @Size(max = 255, min = 8)
     private String password;

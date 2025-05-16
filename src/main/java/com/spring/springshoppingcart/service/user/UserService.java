@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.spring.springshoppingcart.dto.UserDto;
 import com.spring.springshoppingcart.exception.ResourceException;
 import com.spring.springshoppingcart.model.User;
+import com.spring.springshoppingcart.repository.RoleRepository;
 import com.spring.springshoppingcart.repository.UserRepository;
 import com.spring.springshoppingcart.request.CreateUserRequest;
 import com.spring.springshoppingcart.request.UpdateUserRequest;
@@ -25,6 +26,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private final ModelMapper modelMapper;
@@ -49,6 +53,7 @@ public class UserService implements IUserService {
                 user.setName(request.getName());
                 user.setEmail(request.getEmail());
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
+                user.setRoles(roleRepository.findByName("ROLE_USER"));
                 return userRepository.save(user);
             })
             .orElseThrow(() -> new ResourceException(request.getEmail() + " already exists!"));

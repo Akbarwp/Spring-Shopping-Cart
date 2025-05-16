@@ -15,7 +15,7 @@ CREATE TABLE products (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
     name                    VARCHAR(255) NOT NULL,
     brand                   VARCHAR(255) NOT NULL,
-    price                   DOUBLE(38, 2) NOT NULL,
+    price                   DOUBLE NOT NULL,
     inventory               INT NOT NULL,
     description             VARCHAR(255),
     category_id             BIGINT NOT NULL,
@@ -48,7 +48,7 @@ DESC images;
 -- Table Carts
 CREATE TABLE carts (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
-    total_amount            DOUBLE(38, 2) NOT NULL DEFAULT(0),
+    total_amount            DOUBLE NOT NULL DEFAULT(0),
     user_id                 BIGINT NOT NULL,
     created_at              TIMESTAMP,
     updated_at              TIMESTAMP,
@@ -63,8 +63,8 @@ DESC carts;
 CREATE TABLE cart_items (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
     quantity                INT NOT NULL,
-    unit_price              DOUBLE(38, 2) NOT NULL,
-    total_price             DOUBLE(38, 2) NOT NULL,
+    unit_price              DOUBLE NOT NULL,
+    total_price             DOUBLE NOT NULL,
     product_id              BIGINT NOT NULL,
     cart_id                 BIGINT NOT NULL,
     created_at              TIMESTAMP,
@@ -81,7 +81,7 @@ DESC cart_items;
 CREATE TABLE orders (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
     order_date              DATE NOT NULL,
-    total_amount            DOUBLE(38, 2) NOT NULL DEFAULT(0),
+    total_amount            DOUBLE NOT NULL DEFAULT(0),
     order_status            ENUM('PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED') NOT NULL DEFAULT('PENDING'),
     user_id                 BIGINT NOT NULL,
     created_at              TIMESTAMP,
@@ -97,8 +97,7 @@ DESC orders;
 CREATE TABLE order_items (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
     quantity                INT NOT NULL,
-    price                   DOUBLE(38, 2) NOT NULL,
-    total_price             DOUBLE(38, 2) NOT NULL,
+    price                   DOUBLE NOT NULL,
     product_id              BIGINT NOT NULL,
     order_id                BIGINT NOT NULL,
     created_at              TIMESTAMP,
@@ -137,8 +136,8 @@ CREATE TABLE roles (
 SELECT * FROM roles;
 DESC roles;
 
--- Table User Roles
-CREATE TABLE user_roles (
+-- Table Users Roles
+CREATE TABLE users_roles (
     id                      BIGINT NOT NULL AUTO_INCREMENT,
     user_id                 BIGINT NOT NULL,
     role_id                 BIGINT NOT NULL,
@@ -149,5 +148,5 @@ CREATE TABLE user_roles (
     FOREIGN KEY fk_roles_user_roles (role_id) REFERENCES roles (id)
 ) ENGINE InnoDB;
 
-SELECT * FROM user_roles;
-DESC user_roles;
+SELECT * FROM users_roles;
+DESC users_roles;
