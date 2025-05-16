@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.springshoppingcart.exception.ResourceException;
+import com.spring.springshoppingcart.model.Cart;
+import com.spring.springshoppingcart.model.User;
 import com.spring.springshoppingcart.response.ApiResponse;
 import com.spring.springshoppingcart.service.cart.ICartItemService;
 import com.spring.springshoppingcart.service.cart.ICartService;
+import com.spring.springshoppingcart.service.user.IUserService;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,6 +33,9 @@ public class CartItemController {
     @Autowired
     private final ICartItemService cartItemService;
 
+    @Autowired
+    private final IUserService userService;
+
     @PostMapping("/item/add")
     public ResponseEntity<ApiResponse> addItemToCart(
         @RequestParam(required = false) Long cartId,
@@ -36,16 +43,18 @@ public class CartItemController {
         @RequestParam Integer quantity
     ) {
         try {
-            if (cartId == null) {
-                cartId = cartService.initializeNewCart();
-            }
+            User user = userService.getAuthenticatedUser();
+            Cart cart = cartService.initializeNewCart(user);
 
-            cartItemService.addItemToCart(cartId, productId, quantity);
+            cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add item to cart success!", null));
 
         } catch (ResourceException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiResponse(e.getMessage(), null));
+
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

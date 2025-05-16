@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +16,6 @@ import com.spring.springshoppingcart.model.User;
 import com.spring.springshoppingcart.repository.UserRepository;
 import com.spring.springshoppingcart.request.CreateUserRequest;
 import com.spring.springshoppingcart.request.UpdateUserRequest;
-import com.spring.springshoppingcart.security.BCrypt;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +28,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private final ModelMapper modelMapper;
+
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -43,7 +48,7 @@ public class UserService implements IUserService {
                 User user = new User();
                 user.setName(request.getName());
                 user.setEmail(request.getEmail());
-                user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
                 return userRepository.save(user);
             })
             .orElseThrow(() -> new ResourceException(request.getEmail() + " already exists!"));
@@ -73,5 +78,13 @@ public class UserService implements IUserService {
     @Override
     public UserDto convertUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        return userRepository.findByEmail(email);
     }
 }

@@ -1,6 +1,7 @@
 package com.spring.springshoppingcart.service.cart;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.springshoppingcart.exception.ResourceException;
 import com.spring.springshoppingcart.model.Cart;
+import com.spring.springshoppingcart.model.User;
 import com.spring.springshoppingcart.repository.CartItemRepository;
 import com.spring.springshoppingcart.repository.CartRepository;
 
@@ -53,9 +55,13 @@ public class CartService implements ICartService {
 
     @Override
     @Transactional
-    public Long initializeNewCart() {
-        Cart newCart = new Cart();
-        return cartRepository.save(newCart).getId();
+    public Cart initializeNewCart(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId()))
+            .orElseGet(() -> {
+                Cart cart = new Cart();
+                cart.setUser(user);
+                return cartRepository.save(cart);
+            });
     }
 
     @Override

@@ -124,3 +124,30 @@ CREATE TABLE users (
 
 SELECT * FROM users;
 DESC users;
+
+-- Table Roles
+CREATE TABLE roles (
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+    name                    VARCHAR(255) NOT NULL,
+    created_at              TIMESTAMP,
+    updated_at              TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE InnoDB;
+
+SELECT * FROM roles;
+DESC roles;
+
+-- Table User Roles
+CREATE TABLE user_roles (
+    id                      BIGINT NOT NULL AUTO_INCREMENT,
+    user_id                 BIGINT NOT NULL,
+    role_id                 BIGINT NOT NULL,
+    created_at              TIMESTAMP,
+    updated_at              TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY fk_users_user_roles (user_id) REFERENCES users (id),
+    FOREIGN KEY fk_roles_user_roles (role_id) REFERENCES roles (id)
+) ENGINE InnoDB;
+
+SELECT * FROM user_roles;
+DESC user_roles;
