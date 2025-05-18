@@ -4558,7 +4558,7 @@
 		},
 		{
 			"key": "bearer-token",
-			"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpZCI6MSwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3NDc1NjUzMjIsImV4cCI6MTc0NzU2ODkyMn0.C57--eYFEatxfg9fz7CJzDEzhBF-dg7FFuTHIvmg1arxXwroxWB2XEuXxZM25CXBXs9ngdm1QNgLPlVKPt9qQg",
+			"value": "",
 			"type": "string"
 		}
 	]
